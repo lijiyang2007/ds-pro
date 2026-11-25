@@ -561,7 +561,7 @@ private final class FilesChannel: NSObject, QLPreviewControllerDataSource {
         let wanted = name?.isEmpty == false ? name! : URL(fileURLWithPath: path).lastPathComponent
         let target = Self.free(in: documents, name: (wanted as NSString).lastPathComponent)
         try manager.copyItem(at: URL(fileURLWithPath: path), to: target)
-        onMain { result("DSH Go/\(target.lastPathComponent)") }
+        onMain { result("DS Pro/\(target.lastPathComponent)") }
       } catch {
         onMain { result(FlutterError(code: "failed", message: error.localizedDescription, details: nil)) }
       }
