@@ -88,8 +88,8 @@ class DshService : Service() {
                 if (taskId != null) PhoneControl.get(this).pauseTask(taskId, intent.getBooleanExtra(EXTRA_PAUSE, true))
             }
             ACTION_PHONE_BACK -> {
-                // A tap on the live activity: back to the chat, as the floating bar's 回到 DSH Go — a task on
-                // the person's own screen pauses first, or it would go on tapping in DSH Go itself.
+                // A tap on the live activity: back to the chat, as the floating bar's 回到 DS Pro — a task on
+                // the person's own screen pauses first, or it would go on tapping in DS Pro itself.
                 val taskId = intent.data?.takeIf { it.scheme == PHONE_TASK_SCHEME }?.schemeSpecificPart?.toLongOrNull()
                 if (taskId != null) {
                     val control = PhoneControl.get(this)

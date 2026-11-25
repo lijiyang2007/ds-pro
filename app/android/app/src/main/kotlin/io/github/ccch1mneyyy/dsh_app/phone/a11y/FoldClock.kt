@@ -6,7 +6,7 @@ import java.util.EnumSet
  * Which of the control's three forms is due, and when the next one is. Plain Kotlin: the overlay
  * supplies the clock, runs one timer at [nextAt] and animates from what is on screen to [form].
  *
- * - [Form.CAPSULE], the default: what DSH does now, 暂停 and 回到 DSH Go. Left alone it fades to
+ * - [Form.CAPSULE], the default: what DSH does now, 暂停 and 回到 DS Pro. Left alone it fades to
  *   the 闲置时不透明度 after [dimMs], unless 「闲置时自动收起」 folds it first.
  * - [Form.CARD]: the capsule grown out with the second layer (what DSH thinks, its steps, lifted
  *   limits, 插话). Opened from the capsule's line and open until the line is tapped again: it is

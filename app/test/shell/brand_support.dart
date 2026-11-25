@@ -60,10 +60,16 @@ Future<(double, double)> inkBand(WidgetTester tester, TextStyle style, TextScale
 /// The lockup found by [lockup] is built to the rules (see [BrandLockup]).
 /// Returns the word's rect.
 Future<Rect> expectBrandLockup(WidgetTester tester, Finder lockup) async {
-  final label = tester.widget<BrandLockup>(lockup).label;
-  final glyph = tester.getRect(find.descendant(of: lockup, matching: find.byType(BrandMark)));
+  final widget = tester.widget<BrandLockup>(lockup);
+  final label = widget.label;
   final wordFinder = find.descendant(of: lockup, matching: find.text(label));
   final word = tester.getRect(wordFinder);
+  if (!widget.glyph) {
+    // A word-only lockup (the drawer): nothing of the mark beside it.
+    expect(find.descendant(of: lockup, matching: find.byType(BrandMark)), findsNothing);
+    return word;
+  }
+  final glyph = tester.getRect(find.descendant(of: lockup, matching: find.byType(BrandMark)));
   final paragraph = tester.renderObject<RenderParagraph>(wordFinder);
   final style = (paragraph.text as TextSpan).style!;
   final drawn = paragraph.textScaler.scale(style.fontSize!);

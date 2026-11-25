@@ -12,14 +12,12 @@ import 'package:path_provider/path_provider.dart';
 import '../../../l10n/l10n.dart';
 import '../../../state/appearance_state.dart';
 import '../../../state/artifacts.dart' show filesChannelProvider;
-import '../../../state/workshop_catalog_state.dart';
 import '../../../themes/theme_library.dart';
 import '../../common/app_sheet.dart';
 import '../../common/brief_notice.dart';
 import '../../common/list_page_row.dart';
 import '../../theme/app_icons.dart';
 import '../../theme/theme.dart';
-import '../../workshop/workshop_screen.dart';
 import 'theme_studio_sheet.dart';
 
 export 'theme_studio_sheet.dart' show ThemeStudioSheet;
@@ -177,7 +175,6 @@ class _ThemePacksSectionState extends ConsumerState<ThemePacksSection> {
     final lang = english ? 'en' : 'zh';
     final activeId = ref.watch(appearanceProvider.select((s) => s.themePackId));
     final userThemes = ref.watch(userThemesProvider).value ?? const <ThemePack>[];
-    final workshopAvailable = ref.watch(workshopAvailableProvider);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -239,20 +236,7 @@ class _ThemePacksSectionState extends ConsumerState<ThemePacksSection> {
               : '导入含 theme.json、自定义字体或插画的主题压缩包',
           onTap: _busy ? null : () => unawaited(_importZip()),
         ),
-        if (workshopAvailable) ...[
-          const SizedBox(height: 2),
-          ListPageRow(
-            key: const ValueKey('theme-pack-workshop'),
-            icon: AppIcons.workshop,
-            title: english ? 'Theme Workshop' : '主题创意工坊',
-            subtitle: english ? 'Discover community themes or publish your own' : '浏览安装社区创作者的主题，或将你的作品投稿上架',
-            chevron: true,
-            onTap: () {
-              ref.read(workshopCatalogProvider.notifier).setKind(WorkshopKindFilter.theme);
-              unawaited(Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const WorkshopScreen())));
-            },
-          ),
-        ],
+        // DS Pro: 主题创意工坊 removed (no Workshop entry).
       ],
     );
   }

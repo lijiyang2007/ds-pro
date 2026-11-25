@@ -175,7 +175,7 @@ internal enum class Glyph(val filled: Boolean) {
             // 最小化: a short bar low in the square, the window's own minimise sign.
             MINIMIZE -> { moveTo(7f, 15f); lineTo(17f, 15f) }
             BACK -> {
-                // 回到 DSH Go: a U-turn arrow back to the upper left (Phosphor's ArrowUUpLeft).
+                // 回到 DS Pro: a U-turn arrow back to the upper left (Phosphor's ArrowUUpLeft).
                 moveTo(7.5f, 12.75f); lineTo(3.5f, 8.75f); lineTo(7.5f, 4.75f)
                 moveTo(3.5f, 8.75f); lineTo(15f, 8.75f)
                 cubicTo(17.9f, 8.75f, 20.5f, 11.1f, 20.5f, 14f)

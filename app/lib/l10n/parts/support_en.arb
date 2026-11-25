@@ -1,0 +1,98 @@
+{
+  "supportDonate": "Tip the author",
+  "supportDonateIntro": "Thank you for wanting to support it.",
+  "supportDonateBody": "DS Pro is developed from a fork of dsh go. It is free, has no ads, no membership, and holds nothing back for a paid tier. If you find it useful and would like to buy the author a drink, add the QQ below. Any amount is a kindness; and not adding it, or not tipping, changes nothing about how it works.",
+  "supportPetCustomTitle": "Have your own pet made",
+  "supportPetCustomIntro": "Want a pet that is only yours?",
+  "supportPetCustomBody": "Just describe what you want: which animal, which colours, what it wears, what little things it does while standing there. The author turns that into a pet pack; import it here and it shows up in the row above, with the same size options and the same place on your home screen as the built-in ones.",
+  "supportCheapApiTitle": "Want a cheaper API",
+  "supportCheapApiIntro": "The Custom card on the models page takes any OpenAI-compatible provider.",
+  "supportCheapApiBody": "In the Custom card above, tap Add provider, fill in the base URL and API key you were given, and pick the OpenAI-compatible protocol; its models can then be chosen in a conversation. If you cannot find a cheaper provider, or are not sure which fields to fill, add the QQ below and ask the author.",
+  "supportContactQq": "QQ",
+  "supportContactHint": "Tap to copy",
+  "supportContactCopied": "QQ number copied",
+  "supportThanks": "Acknowledgements",
+  "supportThanksIntro": "This app was not built from nothing.",
+  "supportThanksBody": "The interface, the state management, the engine runtime, the bridge and the build scripts of DS Pro all come from the open-source project dsh go, by ccch1mneyyy. Without it there would be no app: what changed here is that a few entries were removed and the name and icon were replaced; everything else is still that code.",
+  "supportThanksBody2": "dsh go itself is a Flutter phone front end plus a packaged DeepSeek Harness engine runtime, both released under AGPL-3.0. The DSH engine, the official plugins and the icon font each carry their own copyright and licence, all listed in the bundled THIRD_PARTY_NOTICES.",
+  "supportThanksBody3": "If you build on this code, please open-source your version under the same licence and keep the original author and these notes.",
+  "supportThanksSourceTitle": "Source",
+  "supportThanksSourceValue": "github.com/ccch1mneyyy/dsh-go",
+  "supportThanksLicenseTitle": "Licence",
+  "supportThanksLicenseValue": "AGPL-3.0",
+  "supportOpenLinkFailed": "Couldn’t open your browser. Link copied.",
+  "supportUsageTitle": "Usage and spend",
+  "supportUsageIntro": "What every conversation on this host has used, added up.",
+  "supportUsageInput": "Input",
+  "supportUsageOutput": "Output",
+  "supportUsageCost": "Spend",
+  "supportUsageCacheRate": "{rate} from cache",
+  "@supportUsageCacheRate": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "supportUsageByChat": "By conversation",
+  "supportUsageUnpriced": "{count} conversations used a model with no price: their tokens count, their money does not.",
+  "@supportUsageUnpriced": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "supportUsagePriceNote": "Spend is estimated from DeepSeek's published price per million tokens, not a bill; price changes, promotions and off-peak discounts are not followed.",
+  "supportUsageFailed": "Could not read the usage. Try again in a moment.",
+  "localBackupTitle": "Local backup and restore",
+  "backupIntro": "Pack this phone's conversations into one file before a new phone or a reinstall.",
+  "backupOnThisPhone": "On this phone",
+  "backupSessionCount": "Conversations",
+  "backupSize": "Size",
+  "backupWhere": "Backups read and write the local engine's own session directory, as it is: nothing is re-encoded.",
+  "backupExport": "Back up",
+  "backupExportAction": "Export every conversation",
+  "backupExportHint": "One ZIP, saved to Downloads or sent to yourself",
+  "backupRestoreActionTitle": "Restore from a backup",
+  "backupRestoreHint": "Pick a ZIP exported earlier and put its conversations back",
+  "backupNoSessions": "There are no conversations on this phone to back up yet.",
+  "backupNoEngine": "The local engine is not installed. Install it before backing up.",
+  "backupTooLarge": "The conversations are too large to fit in one backup.",
+  "backupNotBackup": "That file is not a backup this app wrote.",
+  "backupNewer": "That backup comes from a newer version and cannot be read here.",
+  "backupUnsafe": "The backup holds an unsafe path. Nothing was written.",
+  "localBackupStorageFailed": "Out of storage, or the file could not be written.",
+  "backupUnknownFailure": "Could not finish. Try again.",
+  "localBackupSaved": "Saved to {where}",
+  "@localBackupSaved": {
+    "placeholders": {
+      "where": {
+        "type": "String"
+      }
+    }
+  },
+  "localBackupSavedChosen": "Saved where you chose",
+  "backupRestoreTitle": "Restore conversations?",
+  "backupRestoreBody": "{count} conversations (exported {date}) go back onto this phone. A conversation with the same id is replaced by the one in the backup.",
+  "@backupRestoreBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "backupRestoreAction": "Restore",
+  "localBackupRestored": "Restored {count} conversations.",
+  "@localBackupRestored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupNotes": "A backup holds the conversations only: no API keys, no settings, no phone files. Restoring while the engine runs restarts it once so it sees the restored conversations."
+}

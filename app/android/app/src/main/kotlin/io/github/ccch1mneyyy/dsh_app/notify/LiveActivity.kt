@@ -51,7 +51,7 @@ import io.github.ccch1mneyyy.dsh_app.theme.ThemeAccent
  * Content: [LiveContent]. The agent's part comes from Dart ([update]); phone control's is read
  * here ([PhoneControl.liveTask]) whenever it changes ([refresh]): the app's icon, 「微信 · 点「发送」」,
  * 暂停 / 继续 and 停止, and a tap that goes back to the chat (pausing a task on the person's own
- * screen first, as the floating bar's 回到 DSH Go does).
+ * screen first, as the floating bar's 回到 DS Pro does).
  *
  * Where the phone's own island shows it ([islandShows]), the floating bar steps aside for it
  * (「用系统灵动岛显示」, ControlOverlay).
@@ -360,7 +360,7 @@ object LiveActivity {
     }
 
     private fun openIntent(ctx: Context, c: LiveContent): PendingIntent {
-        // Phone control: 回到 DSH Go, pausing a task on the person's own screen first.
+        // Phone control: 回到 DS Pro, pausing a task on the person's own screen first.
         if (c.kind == LiveContent.Kind.PHONE && c.phoneTaskId != null) {
             return PendingIntent.getService(ctx, ID + 2, DshService.phoneBackIntent(ctx, c.phoneTaskId), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         }

@@ -26,11 +26,9 @@ import '../../ui_config/ui_skill.dart';
 import '../../usage/usage_stats.dart';
 import '../onboarding/onboarding_flow.dart';
 import '../onboarding/setup_progress.dart';
-import '../remote/remote_screen.dart';
 import '../theme/theme.dart';
 import '../web/mode_home.dart';
 import 'brand_mark.dart';
-import 'usage_upgrade_notice.dart';
 
 /// Where a launch should start, given what is installed and configured.
 ///
@@ -121,8 +119,6 @@ class _RootGateState extends ConsumerState<RootGate> {
   /// The setup step asks 本机 or 远程主机 first ([runtimeStepAsks]).
   bool _chooseRuntime = false;
 
-  /// The host list is open over the setup step.
-  bool _pickingRemote = false;
 
   /// First run on this phone, setting up while the runtime unpacks
   /// (docs/design/onboarding-parallel-setup.md).
@@ -226,32 +222,6 @@ class _RootGateState extends ConsumerState<RootGate> {
   void _leaveBeside() {
     _beside = false;
     unawaited(_prefs.setSetupStep(null));
-  }
-
-  /// 「远程主机」: the host list over the setup step. Picking a host there
-  /// (it closes itself) finishes first run without the runtime; coming back
-  /// without one returns to the choice.
-  Future<void> _useRemote() async {
-    if (_pickingRemote) return;
-    _pickingRemote = true;
-    _observeSetup(UsageOperation.onboardingRemote);
-    try {
-      await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const RemoteScreen()));
-    } finally {
-      _pickingRemote = false;
-    }
-    if (!mounted || ref.read(activeHostProvider).isLocal) {
-      _setupUsage?.call(UsageOutcome.cancelled);
-      _setupUsage = null;
-      return;
-    }
-    if (_beside) _leaveBeside();
-    await ref.read(onboardingPrefsProvider.notifier).setLocalDeclined(true);
-    // What installing does on the other path: Android 13 asks about
-    // notifications once the channels exist, before the first reply lands.
-    unawaited(ref.read(notifyChannelProvider).status().then<void>((_) {}, onError: (_) {}));
-    _autoStartDone = true;
-    _goTo(null);
   }
 
   /// 「和角色聊天」: 酒馆 talks to the model itself, so it needs neither the
@@ -390,7 +360,6 @@ class _RootGateState extends ConsumerState<RootGate> {
           onAppearanceDone: _afterAppearance,
           onAccessDone: _afterAccess,
           onFinished: _afterFinishing,
-          onRemote: _useRemote,
           onWelcomeDone: () {
             unawaited(ref.read(onboardingPrefsProvider.notifier).markWelcomeSeen());
             _chooseRuntime = runtimeStepAsks(ref.read(localRuntimeProvider).status);
@@ -403,9 +372,9 @@ class _RootGateState extends ConsumerState<RootGate> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _maybeAutoStart();
         });
-        // The native shell or the web page, by 界面 (ui_mode_state.dart); an
-        // install from before usage statistics is told about them there, once.
-        child = UsageUpgradeNotice(child: widget.home ?? const ModeHome());
+        // The native shell or the web page, by 界面 (ui_mode_state.dart).
+        // DS Pro collects no usage statistics, so there is no first-run notice.
+        child = widget.home ?? const ModeHome();
       }
     }
     if (child is! _Splash && !_launchReady) {
@@ -495,3 +464,4 @@ class _SplashState extends State<_Splash> {
     );
   }
 }
+

@@ -27,8 +27,6 @@ import '../../state/read_list_identity.dart';
 import '../../state/workspaces_state.dart';
 import '../bots/bots_page.dart' show BotsPage, UnreadBadge;
 import '../chat/media/media_format.dart' show chatTitleShown;
-import '../companion/companion_drawer_row.dart';
-import '../companion/companion_page.dart';
 import '../common/app_sheet.dart';
 import '../common/empty_view.dart';
 import '../common/pressable.dart';
@@ -170,7 +168,11 @@ class SessionsDrawer extends ConsumerWidget {
                       const Expanded(
                         child: Align(
                           alignment: AlignmentDirectional.centerStart,
-                          child: FittedBox(fit: BoxFit.scaleDown, child: BrandLockup(height: 19)),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            // DS Pro: the mark is hidden, the name alone.
+                            child: BrandLockup(height: 19, glyph: false),
+                          ),
                         ),
                       ),
                       // 模式 and 网页模式, quietly: the one solid element stays 新对话.
@@ -197,14 +199,7 @@ class SessionsDrawer extends ConsumerWidget {
         onClose: onClose,
         trailing: switcher ? null : _ViewOptionsKey(onClose: onClose, besideSearch: true),
       ),
-      // 伙伴小屋 has a fixed place here, whatever list or host is showing.
-      CompanionDrawerRow(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const CompanionPage(sections: true)));
-          // Close once the page covers us, so "back" lands on the chat.
-          Future<void>.delayed(AppMotion.slow, onClose);
-        },
-      ),
+      // DS Pro: 伙伴小屋 row removed.
       // The workspace switcher (once the host's workspace list has
       // arrived) and the list's options, then the status filters. With no
       // switcher the options sit beside the search bar instead of alone on an
@@ -269,7 +264,7 @@ class SessionsDrawer extends ConsumerWidget {
                       child: ExcludeSemantics(
                         excluding: selecting,
                         child: IdentityBar(
-                          onHost: () => showHostSheet(context, onManage: () => onOpen(DrawerDestination.remote)),
+                          onHost: () => showHostSheet(context),
                           onLocalDetails: () => onOpen(DrawerDestination.engine),
                           onFeatures: () => onOpen(DrawerDestination.features),
                           onSettings: () => onOpen(DrawerDestination.settings),

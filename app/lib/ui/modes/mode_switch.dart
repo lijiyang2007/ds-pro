@@ -14,7 +14,6 @@ import '../../l10n/l10n.dart';
 import '../../state/app_mode_state.dart';
 import '../common/app_sheet.dart';
 import '../common/sheet_title_bar.dart';
-import '../companion/companion_page.dart';
 import '../settings/settings_widgets.dart';
 import '../shell/page_frame.dart';
 import '../tavern/tavern_home_page.dart';
@@ -24,7 +23,6 @@ import '../theme/theme.dart';
 
 /// The page of a mode other than 工作.
 Widget appModePage(AppMode mode) => switch (mode) {
-  AppMode.companion => const CompanionPage(sections: true),
   AppMode.tavern => const TavernHomePage(),
   AppMode.work => throw ArgumentError.value(mode, 'mode', '工作 is the home, not a page'),
 };
@@ -59,13 +57,11 @@ void openAppMode(BuildContext context, AppMode mode) {
 
 String appModeLabel(L10n l10n, AppMode mode) => switch (mode) {
   AppMode.work => l10n.modeWork,
-  AppMode.companion => l10n.companionTitle,
   AppMode.tavern => l10n.tavernTitle,
 };
 
 IconData appModeIcon(AppMode mode) => switch (mode) {
   AppMode.work => AppIcons.chat,
-  AppMode.companion => AppIcons.pet,
   AppMode.tavern => AppIcons.tavern,
 };
 
@@ -89,7 +85,6 @@ class ModeSheet extends ConsumerWidget {
     final startup = ref.watch(appModeProvider.select((s) => s.startup));
     String subtitle(AppMode mode) => switch (mode) {
       AppMode.work => l10n.modeWorkSubtitle,
-      AppMode.companion => l10n.companionEntrySubtitle,
       AppMode.tavern => l10n.modeTavernSubtitle,
     };
     return SafeArea(
@@ -143,7 +138,6 @@ class ModeSheet extends ConsumerWidget {
 /// One word per mode, for the startup switch.
 String appModeShortLabel(L10n l10n, AppMode mode) => switch (mode) {
   AppMode.work => l10n.modeWork,
-  AppMode.companion => l10n.modeCompanionShort,
   AppMode.tavern => l10n.tavernTitle,
 };
 
@@ -224,3 +218,4 @@ class _InstantRoute<T> extends MaterialPageRoute<T> {
   @override
   Duration get reverseTransitionDuration => AppMotion.page;
 }
+

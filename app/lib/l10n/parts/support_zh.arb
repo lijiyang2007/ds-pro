@@ -1,0 +1,98 @@
+{
+  "supportDonate": "打赏",
+  "supportDonateIntro": "谢谢你愿意支持它。",
+  "supportDonateBody": "DS Pro 是从 dsh go 的 fork 分支开发而来。它不收费、不放广告、没有会员，功能也不分版本卖。觉得好用、想请作者喝一杯的话，加下面的 QQ 就行。多少都算心意；不加、不给，用起来也一模一样。",
+  "supportPetCustomTitle": "定制你自己的宠物",
+  "supportPetCustomIntro": "想要一只只属于你的宠物？",
+  "supportPetCustomBody": "把想要的样子说清楚就行：什么动物、什么配色、穿什么、站着做什么小动作。作者照着做成一个宠物包，你在这里导入，它就会出现在上面那一排里，和自带的宠物一样能换大小、能在桌面上待着。",
+  "supportCheapApiTitle": "想用更便宜的 API",
+  "supportCheapApiIntro": "模型页的「自定义」可以接任何 OpenAI 兼容的渠道。",
+  "supportCheapApiBody": "在上面「自定义」下面点「添加渠道」，填上对方给的地址和 API Key，协议选 OpenAI 兼容，保存后就能在对话里选它的模型。找不到便宜的渠道，或者不确定参数怎么填，加下面的 QQ 问作者。",
+  "supportContactQq": "QQ",
+  "supportContactHint": "点一下复制",
+  "supportContactCopied": "已复制 QQ 号",
+  "supportThanks": "致谢",
+  "supportThanksIntro": "这个 App 不是从零做的。",
+  "supportThanksBody": "DS Pro 的界面、状态管理、引擎运行时、桥接和构建脚本，全部来自 dsh go 这个开源项目，作者是 ccch1mneyyy。没有它就没有这个 App：这里只是按自己的想法删掉了一些入口、换了个名字和图标，其余仍然是原来的代码。",
+  "supportThanksBody2": "dsh go 本身是用 Flutter 写的手机前端，加上一个打包好的 DeepSeek Harness 引擎运行时；两者都按 AGPL-3.0 发布。DSH 引擎、官方插件和图标字体各有自己的版权与许可证，随包的 THIRD_PARTY_NOTICES 里列着全部条目。",
+  "supportThanksBody3": "如果你要拿这份代码继续做，也请按同样的许可证开源，并保留原作者和上面这些说明。",
+  "supportThanksSourceTitle": "源码来源",
+  "supportThanksSourceValue": "github.com/ccch1mneyyy/dsh-go",
+  "supportThanksLicenseTitle": "许可证",
+  "supportThanksLicenseValue": "AGPL-3.0",
+  "supportOpenLinkFailed": "没能打开浏览器，链接已复制",
+  "supportUsageTitle": "全局用量与花费",
+  "supportUsageIntro": "这台主机上所有对话加起来用了多少。",
+  "supportUsageInput": "输入",
+  "supportUsageOutput": "输出",
+  "supportUsageCost": "花费",
+  "supportUsageCacheRate": "缓存命中 {rate}",
+  "@supportUsageCacheRate": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "supportUsageByChat": "按对话",
+  "supportUsageUnpriced": "有 {count} 个对话的模型没有价格，只算了 token，没算进花费。",
+  "@supportUsageUnpriced": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "supportUsagePriceNote": "花费按 DeepSeek 官网的每百万 token 价格估算，不是账单；调价、活动价和夜间折扣都不会自动跟。",
+  "supportUsageFailed": "读不到用量，等一下再试。",
+  "localBackupTitle": "本地备份与恢复",
+  "backupIntro": "把这台手机上的对话打包成一个文件，换手机、重装前先存一份。",
+  "backupOnThisPhone": "这台手机上",
+  "backupSessionCount": "对话",
+  "backupSize": "占用",
+  "backupWhere": "备份读写的是本机引擎自己的会话目录，原样进出，不重新编码。",
+  "backupExport": "备份",
+  "backupExportAction": "导出全部对话",
+  "backupExportHint": "打成一个 ZIP，可以存到「下载」或者发给自己",
+  "backupRestoreActionTitle": "从备份恢复",
+  "backupRestoreHint": "选一个之前导出的 ZIP，把里面的对话放回来",
+  "backupNoSessions": "这台手机上还没有对话可以备份。",
+  "backupNoEngine": "本机引擎还没装好，先装好再备份。",
+  "backupTooLarge": "要备份的对话太大，一次装不下。",
+  "backupNotBackup": "这个文件不是本 App 导出的备份。",
+  "backupNewer": "这个备份来自更新的版本，当前版本读不了。",
+  "backupUnsafe": "备份里的路径不安全，已经停下，什么都没写。",
+  "localBackupStorageFailed": "存储空间不够，或者文件写不进去。",
+  "backupUnknownFailure": "没能完成，请重试。",
+  "localBackupSaved": "已存到 {where}",
+  "@localBackupSaved": {
+    "placeholders": {
+      "where": {
+        "type": "String"
+      }
+    }
+  },
+  "localBackupSavedChosen": "已存到你选的位置",
+  "backupRestoreTitle": "恢复对话？",
+  "backupRestoreBody": "会把备份里的 {count} 个对话（{date} 导出的）写回本机。同名的对话会被备份里的版本替换。",
+  "@backupRestoreBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "backupRestoreAction": "恢复",
+  "localBackupRestored": "已恢复 {count} 个对话。",
+  "@localBackupRestored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupNotes": "备份只含对话本身，不含 API Key、设置和手机文件。引擎正在运行时恢复会重启一次，好让它重新扫到恢复的对话。"
+}

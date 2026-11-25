@@ -6,10 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'companion/companion_initiative_owner.dart' show companionInitiativeProvider;
-import 'companion/companion_always_on.dart' show companionAlwaysOnOwnerProvider;
-import 'companion/companion_residency.dart' show companionResidencyProvider;
-import 'companion/companion_state.dart' show companionPhoneSessionsBridgeProvider;
 import 'pets/pet_overlay_bridge.dart' show petOverlayBridgeProvider;
 import 'l10n/l10n.dart';
 import 'performance/performance_state.dart';
@@ -83,8 +79,6 @@ class _DshAppState extends ConsumerState<DshApp> with WidgetsBindingObserver {
     ref.read(usageStatsProvider);
     // 公测版: the star prompt counts time in front from launch, in either 界面.
     if (ref.read(starPromptGateProvider)) ref.read(starPromptProvider);
-    // 伙伴小屋: her invitation ledger is read now, so it is known before the room opens.
-    ref.read(companionInitiativeProvider);
     // 刷新率: some systems cap third-party apps at 60 Hz and then show their per-app
     // switch as an in-app setting; the app answers frames to run at the fastest rate
     // while it is actually drawing (see RefreshRateService).
@@ -194,10 +188,8 @@ class _DshAppState extends ConsumerState<DshApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(companionAlwaysOnOwnerProvider);
-    // Only Android's native phone control knows her sessions.
-    if (Platform.isAndroid) ref.watch(companionPhoneSessionsBridgeProvider);
-    if (ref.watch(companionResidencyProvider).enabled) ref.watch(petOverlayBridgeProvider);
+    // 桌宠 (App 外显示): fed while the overlay is on.
+    ref.watch(petOverlayBridgeProvider);
     // 刷新率设置改动时告诉原生;setMode 对同一个值不做任何事。
     unawaited(RefreshRateService.instance.setMode(ref.watch(performancePrefsProvider.select((p) => p.refreshRate))));
     final themeMode = ref.watch(uiThemeModeProvider.select((s) => s.value));

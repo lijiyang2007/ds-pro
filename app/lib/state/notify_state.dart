@@ -11,7 +11,6 @@ import '../notify/answer_native_request.dart';
 import '../notify/notify_channel.dart';
 import '../phone/phone_channel.dart';
 import '../phone/phone_approval.dart';
-import '../companion/companion_state.dart';
 import '../pets/pet_signals.dart' show petHearAlert, petOnScreenProvider, petEventBusProvider;
 import 'app_info.dart';
 import 'android_features.dart';
@@ -781,10 +780,8 @@ class ChatAlertsController extends Notifier<ChatAlert?> {
   void _deliver(ChatAlert alert) {
     // DS Bot's own conversations: it sends its own notifications.
     if (ref.read(dsBotSessionFilterProvider)(alert.host, alert.sessionId)) return;
-    // The companion's reply is on her page; it isn't a finished task. A request
     // that really waits on the person (an older host's preset has tools) still
     // goes through.
-    if (!alert.kind.attention && ref.read(companionSessionFilterProvider)(alert.host, alert.sessionId)) return;
     final prefs = ref.read(notifyPrefsProvider);
     final foreground = ref.read(appForegroundProvider);
     final delivery = deliveryFor(

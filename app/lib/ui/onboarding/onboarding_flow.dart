@@ -12,7 +12,7 @@ import 'welcome_page.dart';
 ///
 /// On this phone, first run sets up while the runtime unpacks
 /// (docs/design/onboarding-parallel-setup.md): [runtime] asks where DSH runs,
-/// [appearance], [access] (what DSH Go should do, and the permissions for it)
+/// [appearance], [access] (what DS Pro should do, and the permissions for it)
 /// and [apiKey] follow while it unpacks, and [finishing] waits for whatever
 /// is left of it. Upgrades, resets and a phone that only needs a key go
 /// [runtime] (the unpack itself) → [apiKey].
@@ -32,7 +32,6 @@ class OnboardingFlow extends StatefulWidget {
     required this.onRuntimeDone,
     required this.onKeyDone,
     this.chooseRuntime = false,
-    this.onRemote,
     this.onLocal,
     this.onTavern,
     this.onAppearanceDone,
@@ -51,7 +50,6 @@ class OnboardingFlow extends StatefulWidget {
   final bool chooseRuntime;
 
   /// Picked 「远程主机」 (or gave up on a failed install for one).
-  final VoidCallback? onRemote;
 
   /// Picked 「本机」: the caller starts the unpack and moves on to
   /// [OnboardingStep.appearance]. Null: the runtime page installs itself.
@@ -62,7 +60,7 @@ class OnboardingFlow extends StatefulWidget {
 
   final VoidCallback? onAppearanceDone;
 
-  /// Past 想让 DSH Go 帮你做哪些事 (picked and walked, or skipped).
+  /// Past 想让 DS Pro 帮你做哪些事 (picked and walked, or skipped).
   final VoidCallback? onAccessDone;
 
   /// The unpack [OnboardingStep.finishing] waited for is done.
@@ -92,7 +90,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       OnboardingStep.runtime => RuntimeSetupPage(
         onDone: widget.onRuntimeDone,
         choose: widget.chooseRuntime,
-        onRemote: widget.onRemote,
         onLocal: widget.onLocal,
         onTavern: widget.onTavern,
       ),
@@ -102,11 +99,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       OnboardingStep.finishing => RuntimeSetupPage(
         onDone: widget.onFinished ?? widget.onRuntimeDone,
         waiting: true,
-        onRemote: widget.onRemote,
       ),
     };
     // The step bar counts the questions: where DSH runs, then (on this
-    // phone, first run) the look and what DSH Go should do, then the
+    // phone, first run) the look and what DS Pro should do, then the
     // connection.
     final steps = widget.chooseRuntime || widget.beside
         ? const [OnboardingStep.runtime, OnboardingStep.appearance, OnboardingStep.access, OnboardingStep.apiKey]
@@ -122,8 +118,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 steps: steps.length,
                 since: _since,
                 runtime: widget.beside && step != OnboardingStep.runtime,
-                onRemote: widget.onRemote,
-                child: page,
+                        child: page,
               ),
       ),
     );

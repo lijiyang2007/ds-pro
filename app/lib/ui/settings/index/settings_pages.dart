@@ -25,13 +25,14 @@ import '../../phone/system_actions_page.dart';
 import '../../plugins/plugin_inventory_page.dart';
 import '../../plugins/plugins_screen.dart';
 import '../../providers/providers_page.dart';
-import '../../remote/remote_screen.dart';
 import '../../share_hosted/hosted_links_page.dart';
 import '../about_page.dart';
 import '../appearance/appearance_page.dart';
 import '../background_guide_page.dart';
 import '../diagnostics_page.dart';
+import '../global_usage_page.dart';
 import '../interface_page.dart';
+import '../local_backup_page.dart';
 import '../media_settings_page.dart';
 import '../notification_settings.dart';
 import '../performance_page.dart';
@@ -40,6 +41,7 @@ import '../privacy_page.dart';
 import '../linux_environment_page.dart';
 import '../reply_prefs_page.dart';
 import '../settings_screen.dart';
+import '../support_page.dart';
 import '../system_access_page.dart';
 import '../../companion/companion_voice_page.dart';
 import '../voice_settings_page.dart';
@@ -73,6 +75,12 @@ Widget settingsPage(SettingsPageId id, {String? sessionId}) => switch (id) {
   SettingsPageId.background => const BackgroundGuidePage(),
   SettingsPageId.systemAccess => const SystemAccessPage(),
   SettingsPageId.diagnostics => const DiagnosticsPage(),
+  SettingsPageId.support => const DonatePage(),
+  SettingsPageId.thanks => const ThanksPage(),
+  SettingsPageId.usageOverview => const GlobalUsagePage(),
+  SettingsPageId.localBackup => const LocalBackupPage(),
+  SettingsPageId.petsCustom => const PetCustomPage(),
+  SettingsPageId.cheapApi => const CheapApiPage(),
   SettingsPageId.models => const ProvidersPage(),
   SettingsPageId.engineParams => const EngineSettingsHubPage(),
   SettingsPageId.subagent => const SubagentSettingsPage(),
@@ -84,7 +92,6 @@ Widget settingsPage(SettingsPageId id, {String? sessionId}) => switch (id) {
   SettingsPageId.plugins => const PluginsScreen(),
   SettingsPageId.allFeatures => const AllFeaturesPage(),
   SettingsPageId.account => const AccountPage(),
-  SettingsPageId.remote => const RemoteScreen(),
   SettingsPageId.permission => PermissionPage(sessionId: sessionId),
   SettingsPageId.agentPresets => const AgentPresetsPage(),
   SettingsPageId.personalization => const PersonalizationPage(),

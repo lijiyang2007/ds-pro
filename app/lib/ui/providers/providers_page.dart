@@ -23,6 +23,7 @@ import '../features/feature_kit.dart';
 import '../features/feature_widgets.dart';
 import '../onboarding/api_key_page.dart' show maskApiKey;
 import '../settings/index/spots.dart';
+import '../settings/support_page.dart';
 import '../shell/page_frame.dart';
 import '../theme/app_icons.dart';
 import '../theme/theme.dart';
@@ -116,6 +117,20 @@ class ProvidersPage extends ConsumerWidget {
               }
             },
           ),
+        // DS Pro: 想用更便宜的 API — how to add a cheaper provider, and who to ask.
+        Padding(
+          padding: const EdgeInsets.only(bottom: 24),
+          child: ListPageCard(
+            children: [
+              ListPageRow(
+                icon: AppIcons.balance,
+                spot: SettingsIndex.entry(SettingsPageId.cheapApi),
+                subtitle: l10n.supportCheapApiIntro,
+                onTap: () => _push(context, const CheapApiPage()),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

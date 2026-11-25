@@ -409,8 +409,7 @@ class _HomeShellState extends ConsumerState<HomeShell> with TickerProviderStateM
                               onMenu: _onMenu,
                               menuTooltip: AdaptiveChrome.menuTooltipFor(layout),
                               onSearch: _search,
-                              onHost: () =>
-                                  showHostSheet(context, onManage: () => _openDestination(DrawerDestination.remote)),
+                              onHost: () => showHostSheet(context),
                               onWeb: () => _openDestination(DrawerDestination.web),
                               onSettings: () => _openDestination(DrawerDestination.settings),
                             ),

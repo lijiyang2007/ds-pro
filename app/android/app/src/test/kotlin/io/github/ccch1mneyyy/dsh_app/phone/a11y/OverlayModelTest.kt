@@ -70,12 +70,12 @@ class OverlayModelTest {
         assertEquals(emptyList<String>(), h.before(null, 3))
     }
 
-    // ---- 头部：暂停（按住停止）和回到 DSH Go，位置不变 -------------------------------------------------
+    // ---- 头部：暂停（按住停止）和回到 DS Pro，位置不变 -------------------------------------------------
 
     @Test fun pauseAndBackAreTheKeysAndNeverMove() {
         val running = CapsuleMetrics.slots(stopped = false)
         assertEquals(listOf(Slot.MARK, Slot.LINE, Slot.PAUSE, Slot.BACK), running)
-        // 回到 DSH Go at the right end, 暂停 (held a second: 停止) beside it, the same in the capsule and the card.
+        // 回到 DS Pro at the right end, 暂停 (held a second: 停止) beside it, the same in the capsule and the card.
         assertEquals(Slot.BACK, running.last())
         // Once stopped there is nothing left to pause or go back from here.
         assertEquals(listOf(Slot.MARK, Slot.LINE), CapsuleMetrics.slots(stopped = true))

@@ -1893,7 +1893,7 @@ internal object PetOverlay {
         PetScreenshot.capture(app) { result ->
             val accepted = capture.finish(request) && alive(ticket) && interactive() && machine.enabled &&
                 started == 0 && !machine.appForeground && !machine.snoozed(now()) &&
-                // A phone task that began meanwhile keeps the screen; DSH Go doesn't jump in front of it.
+                // A phone task that began meanwhile keeps the screen; DS Pro doesn't jump in front of it.
                 PhoneControl.peek()?.foregroundLine() == null
             val path = result.path
             if (accepted && path != null) {

@@ -73,7 +73,7 @@ internal data class CapsuleState(
 /**
  * The control's open window (TYPE_ACCESSIBILITY_OVERLAY): one dark island surface that is a capsule
  * — the default: the app DSH works in, what it does now over 「微信 · 第 6 步 · 0:42」, 暂停 (held a
- * second: 停止) and 回到 DSH Go — or the card that grows out of it, and shrinks to a circle when it
+ * second: 停止) and 回到 DS Pro — or the card that grows out of it, and shrinks to a circle when it
  * folds into the ball. While DSH works a beam runs round its edge. The card is for watching DSH
  * work: what it thinks (its own words from the chat) and the steps it took, on a timeline that
  * runs out from the app's icon, each new step sliding in with its node popping; then 插话 and
@@ -82,7 +82,7 @@ internal data class CapsuleState(
  * fade. The header row is the same in both forms, so its keys never move. The card opens away from
  * the nearer end of the screen ([down]: under an island at the top, it hangs down). The capsule
  * sits on its [anchor]'s side of the card and grows from it. The header can be dragged (anywhere
- * but 暂停 / 回到 DSH Go, which stay taps and holds); the owner moves the window.
+ * but 暂停 / 回到 DS Pro, which stay taps and holds); the owner moves the window.
  *
  * Main thread only. The owner ([ControlOverlay]) adds and removes the window, decides the form and
  * runs the ball; this class draws, lays out and morphs.
@@ -126,7 +126,7 @@ internal class OverlayCapsule(
         /** 暂停 held a second, the card's 停止, or the screen reader's stop. */
         fun stop()
 
-        /** 回到 DSH Go. */
+        /** 回到 DS Pro. */
         fun back()
         fun unlocks()
         fun steer()
@@ -244,7 +244,7 @@ internal class OverlayCapsule(
         holdToStop({ if (state?.stopped == true) null else strings.stop }) { actions.stop() }
     }
 
-    /** 回到 DSH Go: the chat this task belongs to. */
+    /** 回到 DS Pro: the chat this task belongs to. */
     val back = RoundKey(ctx, CapsuleMetrics.DISC_DP, 18).apply {
         disc = c.tonal
         ink = c.ink
@@ -776,7 +776,7 @@ internal class OverlayCapsule(
     private var downX = 0f
     private var downY = 0f
 
-    /** The finger came down on the header, not on 暂停 / 回到 DSH Go (always taps or holds), and nobody is typing. */
+    /** The finger came down on the header, not on 暂停 / 回到 DS Pro (always taps or holds), and nobody is typing. */
     private var dragFrom = false
     private var tracker: VelocityTracker? = null
 
