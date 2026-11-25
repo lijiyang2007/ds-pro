@@ -695,7 +695,7 @@ final _pages = <SettingsPageMeta>[
   ),
   SettingsPageMeta(
     SettingsPageId.localBackup,
-    title: (l) => l.backupTitle,
+    title: (l) => l.localBackupTitle,
     group: _general,
     keywords: (l) => l.searchKwBackup,
     freq: Freq.medium,
