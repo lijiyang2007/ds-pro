@@ -1,0 +1,136 @@
+# DS Pro 的 iOS 未签名 IPA 构建。
+# 与 .github/workflows/ios-compile.yml 的 engine / compile 两个 job 等价：同 Xcode 26.6、
+# 同 Flutter 3.47.7（带 SHA256 校验）、同 tooling/ios 脚本，只是换到 Codemagic 的 macOS 机器上跑，
+# 不需要任何签名证书或密钥。产出：DS-Pro-unsigned.ipa（未签名，装之前仍要自己签名）。
+workflows:
+  ds-pro-ios-unsigned:
+    name: DS Pro iOS unsigned IPA
+    instance_type: mac_mini_m2
+    max_build_duration: 120
+    environment:
+      # Codemagic 的 latest 目前就是 26.6；显式写死，避免以后默认镜像漂移。
+      xcode: "26.6"
+      vars:
+        FLUTTER_VERSION: 3.47.7
+        FLUTTER_SHA256: dd9da574c3168460550117eb0e8dd0313ae934fabf64a82a6d557fff5fd1422e
+    cache:
+      cache_paths:
+        - $HOME/dsh-ios-engine
+        - $HOME/.cargo/registry
+        - $HOME/.cargo/git
+        - $HOME/.pub-cache
+    scripts:
+      - name: 记录工具链并生成本次构建的环境文件
+        script: |
+          set -euo pipefail
+          ENV_FILE="$HOME/dspro-env.sh"
+          cat > "$ENV_FILE" <<EOF
+          export CM_ROOT="\${CM_BUILD_DIR:-\${FCI_BUILD_DIR:-\$PWD}}"
+          export FLUTTER_VERSION="${FLUTTER_VERSION}"
+          export FLUTTER_SHA256="${FLUTTER_SHA256}"
+          export DSH_IOS_ENGINE_WORK="\$HOME/dsh-ios-engine"
+          export RUNNER_TEMP="\$HOME/runner-temp"
+          EOF
+          mkdir -p "$HOME/runner-temp"
+          source "$ENV_FILE"
+          echo "repo root: $CM_ROOT"
+          sw_vers
+          echo "DEVELOPER_DIR=${DEVELOPER_DIR:-unset}"
+          xcodebuild -version
+          xcodebuild -showsdks | grep -i iphone || true
+
+      - name: 装构建工具（Homebrew llvm/lld、meson、ninja、rustup）
+        script: |
+          set -euo pipefail
+          ENV_FILE="$HOME/dspro-env.sh"
+          source "$ENV_FILE"
+          # iSH 用 ld.lld 链接，Homebrew 把它和 llvm 分成了两个 formula。
+          brew update >/dev/null 2>&1 || true
+          brew install llvm lld
+          mkdir -p "$HOME/ish-tools"
+          python3 -m venv "$HOME/ish-tools"
+          "$HOME/ish-tools/bin/pip" install --quiet 'meson==1.7.2' 'ninja==1.11.1.4'
+          # prepare-engine.sh 要 python3 >= 3.11。
+          if ! python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)'; then
+            brew install python@3.12
+            echo "export PYTHON=$(brew --prefix python@3.12)/libexec/bin/python3" >> "$ENV_FILE"
+          fi
+          python3 --version
+          # 手机侧 Rust 库（tooling/ios/phone-self-runner）用仓库里的 rust-toolchain.toml 定版本。
+          if ! command -v cargo >/dev/null 2>&1; then
+            curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+          fi
+          {
+            printf 'export PATH="$HOME/ish-tools/bin:$HOME/.cargo/bin:%s/bin:%s/bin:$PATH"\n' \
+              "$(brew --prefix llvm)" "$(brew --prefix lld)"
+          } >> "$ENV_FILE"
+          source "$ENV_FILE"
+          cargo --version
+          rustup --version
+          ld.lld --version
+
+      - name: 装 Flutter 3.47.7（校验 SHA256）
+        script: |
+          set -euo pipefail
+          ENV_FILE="$HOME/dspro-env.sh"
+          source "$ENV_FILE"
+          archive="flutter_macos_arm64_${FLUTTER_VERSION}-stable.zip"
+          curl -fsSL -o "$HOME/$archive" \
+            "https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/$archive"
+          echo "$FLUTTER_SHA256  $HOME/$archive" | shasum -a 256 -c -
+          rm -rf "$HOME/flutter"
+          unzip -q "$HOME/$archive" -x 'flutter/bin/cache/artifacts/engine/android-*/*' -d "$HOME"
+          echo 'export PATH="$HOME/flutter/bin:$PATH"' >> "$ENV_FILE"
+          source "$ENV_FILE"
+          flutter --version
+          flutter config --no-analytics >/dev/null 2>&1 || true
+
+      - name: 解析依赖并生成本地化
+        script: |
+          set -euo pipefail
+          ENV_FILE="$HOME/dspro-env.sh"
+          source "$ENV_FILE"
+          cd "$CM_ROOT"
+          python3 app/tool/l10n_merge.py --no-gen
+          cd app
+          flutter pub get --enforce-lockfile
+          flutter gen-l10n
+
+      - name: 准备引擎（NodeMobile、运行时归档、两个原生 addon）
+        script: |
+          set -euo pipefail
+          ENV_FILE="$HOME/dspro-env.sh"
+          source "$ENV_FILE"
+          cd "$CM_ROOT"
+          bash tooling/ios/prepare-engine.sh
+          ls -la app/ios/Engine
+
+      - name: 归档并产出未签名 IPA
+        script: |
+          set -euo pipefail
+          ENV_FILE="$HOME/dspro-env.sh"
+          source "$ENV_FILE"
+          cd "$CM_ROOT"
+          export RUNNER_TEMP="$HOME/runner-temp"
+          mkdir -p "$RUNNER_TEMP"
+          # check-archive.sh：flutter build ios --config-only + xcodebuild archive，
+          # 然后逐项校验 Runner.app（引擎 framework、arm64 slice、许可文件、dylib 位置），
+          # 最后打成 $RUNNER_TEMP/DSH-Go-unsigned.ipa。
+          bash tooling/ios/check-archive.sh
+
+      - name: 命名产物并记录校验值
+        script: |
+          set -euo pipefail
+          ENV_FILE="$HOME/dspro-env.sh"
+          source "$ENV_FILE"
+          cd "$CM_ROOT"
+          cp "$RUNNER_TEMP/DSH-Go-unsigned.ipa" "$CM_ROOT/DS-Pro-unsigned.ipa"
+          shasum -a 256 "$CM_ROOT/DS-Pro-unsigned.ipa"
+          du -h "$CM_ROOT/DS-Pro-unsigned.ipa"
+          unzip -l "$CM_ROOT/DS-Pro-unsigned.ipa" | head -8
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' \
+            "$RUNNER_TEMP/ipa/Payload/Runner.app/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' \
+            "$RUNNER_TEMP/ipa/Payload/Runner.app/Info.plist"
+    artifacts:
+      - DS-Pro-unsigned.ipa
