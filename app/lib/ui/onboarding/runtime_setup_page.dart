@@ -32,8 +32,8 @@ enum _SetupView { choose, waiting, installing, done, failed }
 /// colour and the page offers retry, logs and a diagnostics export.
 ///
 /// With [choose], a runtime that is not there yet is not installed at once:
-/// the page first asks where DSH runs, on this phone or on a remote host
-/// ([RuntimeChoiceView]).
+/// the page first offers 本机 ([RuntimeChoiceView]); DS Pro has no remote
+/// host to fall back to.
 ///
 /// With [waiting], it is first run's last stop: everything else is set and
 /// only the unpack is left (docs/design/onboarding-parallel-setup.md).
@@ -42,7 +42,6 @@ class RuntimeSetupPage extends ConsumerStatefulWidget {
     super.key,
     required this.onDone,
     this.choose = false,
-    this.onRemote,
     this.onLocal,
     this.onTavern,
     this.waiting = false,
@@ -54,10 +53,6 @@ class RuntimeSetupPage extends ConsumerStatefulWidget {
 
   /// Ask first (first run): this phone or a remote host.
   final bool choose;
-
-  /// The way to a remote host instead of installing: the second choice
-  /// ([choose]) and, after a failed install, a quiet 「改用远程主机」.
-  final VoidCallback? onRemote;
 
   /// Picked 「本机」 in the choice: the caller starts the unpack and moves on
   /// while it runs. Null: this page installs and shows the progress.
@@ -87,7 +82,7 @@ class _RuntimeSetupPageState extends ConsumerState<RuntimeSetupPage> {
   bool _installRequested = false;
 
   /// Asks where DSH runs before installing.
-  bool get _asks => widget.choose && widget.onRemote != null;
+  bool get _asks => widget.choose;
 
   @override
   void initState() {
@@ -168,8 +163,7 @@ class _RuntimeSetupPageState extends ConsumerState<RuntimeSetupPage> {
               key: const ValueKey('choose'),
               leading: widget.leading,
               onLocal: widget.onLocal ?? () => _install(),
-              onRemote: widget.onRemote!,
-              onTavern: widget.onTavern,
+                onTavern: widget.onTavern,
             )
           : KeyedSubtree(key: const ValueKey('progress'), child: _progress(context, state, view)),
     );
@@ -335,15 +329,6 @@ class _RuntimeSetupPageState extends ConsumerState<RuntimeSetupPage> {
               child: Text(l10n.shellRuntimeContinueWithoutKept),
             ),
           )
-        else if (widget.onRemote case final onRemote?)
-          // Storage full, a broken package…: the other way in, just as quiet.
-          Center(
-            child: TextButton(
-              onPressed: onRemote,
-              style: TextButton.styleFrom(foregroundColor: scheme.onSurfaceVariant),
-              child: Text(l10n.localEnvUseRemote),
-            ),
-          ),
       ],
     );
   }

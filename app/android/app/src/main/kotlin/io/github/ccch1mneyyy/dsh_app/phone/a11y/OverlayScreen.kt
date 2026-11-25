@@ -36,7 +36,7 @@ import kotlin.math.roundToInt
  * The background screen, shown (docs/design/phone-overlay.md §13): while a task runs on the
  * background screen and 实时查看后台屏 is on, this small window takes the capsule's place — a live,
  * view-only picture of the background screen in the island's dark frame, what DSH does under it,
- * 暂停 (held a second: 停止) and 回到 DSH Go. A beam runs round it while DSH works.
+ * 暂停 (held a second: 停止) and 回到 DS Pro. A beam runs round it while DSH works.
  *
  * It rests against the left or right side at a height the person chose (kept across tasks), in
  * one of two sizes: a tap on the picture switches them. The key in the picture's corner minimises
@@ -768,7 +768,7 @@ internal class OverlayScreen(
         /** Room round the island for its shadow, inside the window. */
         const val PAD_DP = 12
 
-        /** 暂停 and 回到 DSH Go under the picture: 40 dp to touch, a 30 dp disc. */
+        /** 暂停 and 回到 DS Pro under the picture: 40 dp to touch, a 30 dp disc. */
         const val KEY_DP = 40
         const val KEY_DISC_DP = 30
 

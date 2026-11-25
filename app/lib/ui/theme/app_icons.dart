@@ -399,6 +399,9 @@ abstract final class AppIcons {
   /// 「问 AI」: a question about the app for the agent (ui/common/ask_ai.dart).
   static const askAi = DshGlyphs.sparkle;
 
+  /// 设置 › 帮助与关于 › 打赏.
+  static const donate = DshGlyphs.heart;
+
   /// 「给 dsh-go 点个 star」: the project on GitHub (ui/star/).
   static const starProject = DshGlyphs.star;
   static const important = DshGlyphs.sealWarning;

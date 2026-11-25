@@ -82,7 +82,7 @@ import java.util.concurrent.TimeUnit
  * the main thread.
  *
  * While a task runs the person sees one control, in three forms (docs/design/phone-overlay.md):
- * the capsule with the line, 暂停 and 回到 DSH Go ([OverlayCapsule]), an island at the top centre
+ * the capsule with the line, 暂停 and 回到 DS Pro ([OverlayCapsule]), an island at the top centre
  * until the person drags it elsewhere, the card it grows into (what DSH thinks and its steps), and
  * the ball it folds into ([OverlayBall]), with a band of light round the screen's edge
  * ([EdgeBeam]). Where the phone has its own island and shows the task there ([LiveActivity]), that
@@ -1137,8 +1137,8 @@ internal class ControlOverlay(private val service: AccessibilityService) : UserG
     }
 
     /**
-     * 回到 DSH Go: the chat (or companion room) this task belongs to. A task on the person's own screen is paused first —
-     * DSH would otherwise go on tapping in whatever app is in front, now DSH Go itself; one on the
+     * 回到 DS Pro: the chat (or companion room) this task belongs to. A task on the person's own screen is paused first —
+     * DSH would otherwise go on tapping in whatever app is in front, now DS Pro itself; one on the
      * background screen goes on.
      */
     private fun backToApp() {

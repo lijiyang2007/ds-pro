@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/l10n.dart';
-import '../../performance/performance_state.dart';
 import '../../runtime/local_footprint.dart';
 import '../../runtime/runtime_state.dart';
 import '../common/pressable.dart';
@@ -15,8 +14,8 @@ import '../theme/app_icons.dart';
 import '../theme/theme.dart';
 import 'onboarding_scaffold.dart';
 
-/// Where DSH runs, or 酒馆 without it.
-enum RuntimeOption { local, remote, tavern }
+/// Where DSH runs, or 酒馆 without it. DS Pro runs on this phone only.
+enum RuntimeOption { local, tavern }
 
 /// Two option cards and one 「继续」:
 ///
@@ -41,10 +40,9 @@ enum RuntimeOption { local, remote, tavern }
 /// person picks one. A build without the native runtime
 /// ([LocalRuntimeState.available]) greys 本机 out and goes on with 远程主机.
 class RuntimeChoiceView extends ConsumerStatefulWidget {
-  const RuntimeChoiceView({super.key, required this.onLocal, required this.onRemote, this.onTavern, this.leading});
+  const RuntimeChoiceView({super.key, required this.onLocal, this.onTavern, this.leading});
 
   final VoidCallback onLocal;
-  final VoidCallback onRemote;
 
   /// 和角色聊天 (first run only): 酒馆, with nothing installed. Null: no such
   /// card, and the question stays where DSH runs.
@@ -64,16 +62,9 @@ class _RuntimeChoiceViewState extends ConsumerState<RuntimeChoiceView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final footprint = ref.watch(localFootprintProvider).value;
-    final light = ref.watch(performanceDefaultsProvider).recommendRemote;
     final available = ref.watch(localRuntimeProvider.select((s) => s.available));
-    final suggested = !available || light || footprint?.suggestRemote == true
-        ? RuntimeOption.remote
-        : RuntimeOption.local;
-    final selected = _picked == RuntimeOption.tavern
-        ? RuntimeOption.tavern
-        : available
-        ? _picked ?? suggested
-        : RuntimeOption.remote;
+    // DS Pro: 本机 is the only runtime; 酒馆 is the other first-run way.
+    final selected = _picked == RuntimeOption.tavern ? RuntimeOption.tavern : RuntimeOption.local;
     final onTavern = widget.onTavern;
     final colors = DshColors.of(context);
 
@@ -109,16 +100,6 @@ class _RuntimeChoiceViewState extends ConsumerState<RuntimeChoiceView> {
           selected: selected == RuntimeOption.local,
           onTap: available ? () => setState(() => _picked = RuntimeOption.local) : null,
         ),
-        const SizedBox(height: RuntimeOptionCard.gap),
-        RuntimeOptionCard(
-          key: const ValueKey('runtime-option-remote'),
-          icon: AppIcons.computer,
-          title: l10n.commonRemoteHost,
-          detail: light ? l10n.performanceRemoteHint : l10n.localEnvRemoteDetail,
-          recommended: available && suggested == RuntimeOption.remote,
-          selected: selected == RuntimeOption.remote,
-          onTap: () => setState(() => _picked = RuntimeOption.remote),
-        ),
         if (onTavern != null) ...[
           const SizedBox(height: RuntimeOptionCard.gap),
           RuntimeOptionCard(
@@ -135,7 +116,6 @@ class _RuntimeChoiceViewState extends ConsumerState<RuntimeChoiceView> {
         FilledButton(
           onPressed: switch (selected) {
             RuntimeOption.local => widget.onLocal,
-            RuntimeOption.remote => widget.onRemote,
             RuntimeOption.tavern => onTavern,
           },
           child: Text(l10n.commonContinue),
@@ -301,3 +281,4 @@ class _Tag extends StatelessWidget {
     );
   }
 }
+

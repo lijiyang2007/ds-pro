@@ -19,7 +19,6 @@ import '../share_hosted/hosted_links_tile.dart';
 import '../shell/page_frame.dart';
 import 'credential_recovery_dialog.dart';
 import 'settings_widgets.dart';
-import 'usage_stats_section.dart';
 
 class PrivacyPage extends ConsumerWidget {
   const PrivacyPage({super.key});
@@ -52,7 +51,8 @@ class PrivacyPage extends ConsumerWidget {
               ),
             ],
           ),
-        const UsageStatsSection(),
+        // DS Pro: 改进 DSH Go (anonymous usage statistics) removed — DS Pro
+        // sends no usage data.
         SettingsSection(
           title: l10n.phoneLocalOcrTitle,
           footer: Text('${l10n.phoneLocalOcrDisclosure}\n\n${l10n.phoneLocalOcrDetails}'),

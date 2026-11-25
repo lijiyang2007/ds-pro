@@ -169,8 +169,7 @@ class _RemoteScreenState extends ConsumerState<RemoteScreen> {
             SettingsTile(
               icon: AppIcons.add,
               tinted: false,
-              spot: Spots.addSshHost,
-              subtitle: ssh.isEmpty ? l10n.remoteSshDirect : null,
+                            subtitle: ssh.isEmpty ? l10n.remoteSshDirect : null,
               onTap: () => unawaited(_addSsh()),
             ),
           ],
@@ -182,16 +181,14 @@ class _RemoteScreenState extends ConsumerState<RemoteScreen> {
             if (ssh.isNotEmpty || signedIn)
               SettingsSwitchTile(
                 key: const ValueKey('remote-auto-connect'),
-                spot: Spots.remoteAutoConnect,
-                subtitle: l10n.remoteAutoConnectOnStartupHint,
+                                subtitle: l10n.remoteAutoConnectOnStartupHint,
                 value: ref.watch(remoteAutoConnectProvider),
                 onChanged: (value) => unawaited(ref.read(remoteAutoConnectProvider.notifier).set(value)),
               ),
             // Always here: settings search lands on it, signed in or not.
             SettingsSwitchTile(
               key: const ValueKey('remote-compact-history'),
-              spot: Spots.remoteCompactHistory,
-              subtitle: l10n.remoteCompactHistoryHint,
+                            subtitle: l10n.remoteCompactHistoryHint,
               value: ref.watch(remoteCompactHistoryProvider),
               onChanged: (value) => unawaited(ref.read(remoteCompactHistoryProvider.notifier).set(value)),
             ),
@@ -203,8 +200,7 @@ class _RemoteScreenState extends ConsumerState<RemoteScreen> {
             SettingsTile(
               icon: AppIcons.save,
               tinted: false,
-              spot: Spots.remoteSessionBackup,
-              onTap: () => push(const SessionBackupPage()),
+                            onTap: () => push(const SessionBackupPage()),
             ),
             SettingsTile(
               icon: AppIcons.webConsole,

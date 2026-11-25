@@ -584,7 +584,7 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: TextButton(
-                  onPressed: () => showHostSheet(context, onManage: () {}),
+                  onPressed: () => showHostSheet(context),
                   child: const Text('open'),
                 ),
               ),
@@ -676,7 +676,7 @@ void main() {
       expect(runtime.calls, isEmpty);
 
       final context = tester.element(find.byType(RemoteScreen));
-      unawaited(showHostSheet(context, onManage: () {}));
+      unawaited(showHostSheet(context));
       await _frames(tester, 6);
       expect(find.byType(HostSheet), findsOneWidget);
       expect(find.text('这台手机上的 DSH'), findsNothing);

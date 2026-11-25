@@ -16,11 +16,20 @@ abstract final class AppInfo {
 
   /// The app's name as the phone shows it: launcher, Recents, notifications, system
   /// settings, the licence page. Matches `android:label` in AndroidManifest.xml.
-  static const name = 'DSH Go';
+  static const name = 'DS Pro';
 
   /// The in-app wordmark: the drawer's lockup, the welcome page and the brand mark's
   /// spoken label.
-  static const wordmark = 'DSH';
+  static const wordmark = 'DS Pro';
+
+  /// Where the person behind the app can be reached (打赏, 定制宠物, 便宜的 API).
+  static const contactQq = '212984367';
+
+  /// The project this app is a fork of (设置 › 帮助与关于 › 致谢).
+  static const upstreamName = 'dsh go';
+  static const upstreamAuthor = 'ccch1mneyyy';
+  static const upstreamProject = 'ccch1mneyyy/dsh-go';
+  static const upstreamUrl = 'https://github.com/ccch1mneyyy/dsh-go';
 
   /// Required wording: the app is built on DSH but is not an official DeepSeek product.
   /// Shown on the About and licence pages.
@@ -29,7 +38,7 @@ abstract final class AppInfo {
   /// The line under the brand mark (welcome page, 关于 dsh-go).
   static String get slogan => appL10n.appSlogan;
 
-  /// The original DSH Go author and their personal profiles, not project pages.
+  /// The original DS Pro author and their personal profiles, not project pages.
   static const author = 'ccch1mneyyy';
   static const authorBilibiliName = 'ccchimneyyy';
   static const authorBilibiliUrl = 'https://b23.tv/9WBns6Y';

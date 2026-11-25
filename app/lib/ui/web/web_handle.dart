@@ -23,7 +23,6 @@ import '../common/app_sheet.dart';
 import '../common/sheet_title_bar.dart';
 import '../remote/host_status.dart';
 import '../remote/host_switcher.dart';
-import '../remote/remote_screen.dart';
 import '../settings/settings_screen.dart';
 import '../settings/settings_widgets.dart';
 import '../shell/brand_mark.dart';
@@ -156,7 +155,7 @@ class _HandleSheet extends ConsumerWidget {
                 value: Text(name),
                 onTap: () {
                   navigator.pop();
-                  unawaited(showHostSheet(navigator.context, onManage: () => push(const RemoteScreen())));
+                  unawaited(showHostSheet(navigator.context));
                 },
               ),
             ],

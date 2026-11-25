@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/l10n.dart';
-import '../../runtime/local_footprint.dart';
 import '../../runtime/runtime_state.dart';
 import '../../state/account_state.dart';
 import '../../state/android_features.dart';
-import '../../state/ask_ai.dart' show askAiAvailableProvider;
 import '../../state/balance_state.dart';
 import '../../state/connection_state.dart';
 import '../../state/engine_settings_state.dart';
@@ -20,11 +18,9 @@ import '../../state/sessions_state.dart';
 import '../../state/settings_state.dart';
 import '../../state/system_actions_state.dart';
 import '../../state/ui_mode_state.dart';
-import '../../state/update_state.dart';
 import '../account/account_page.dart';
 import '../account/account_widgets.dart';
 import '../chat/balance_widgets.dart' show formatMoney;
-import '../common/ask_ai.dart';
 import '../common/overview_card.dart';
 import '../common/search_capsule.dart';
 import '../common/status_chip.dart';
@@ -32,8 +28,9 @@ import '../engine/engine_screen.dart';
 import '../engine/engine_status.dart';
 import '../engine_settings/engine_settings_hub.dart';
 import '../engine_settings/web_search_page.dart';
+import 'global_usage_page.dart';
+import 'local_backup_page.dart';
 import 'media_settings_page.dart';
-import '../features/feature_catalog.dart' show communityPage;
 import '../features/feature_format.dart' show permissionName;
 import '../features/permission_page.dart';
 import '../onboarding/api_key_page.dart' show maskApiKey;
@@ -44,14 +41,10 @@ import '../plugins/plugins_screen.dart';
 import '../plugins/seats/plugin_settings_tiles.dart';
 import '../plugins/seats/seat_probe.dart';
 import '../providers/providers_page.dart';
-import '../remote/host_status.dart';
-import '../remote/remote_screen.dart';
 import '../shell/brand_mark.dart';
 import '../shell/page_frame.dart';
 import '../theme/app_icons.dart';
 import '../theme/theme.dart';
-import '../update/update_tiles.dart' show UpdateBadge;
-import 'about_page.dart';
 import 'appearance/appearance_page.dart';
 import 'background_guide_page.dart';
 import 'diagnostics_page.dart';
@@ -64,6 +57,7 @@ import 'personalization_page.dart';
 import 'privacy_page.dart';
 import 'search/settings_search_page.dart';
 import 'settings_widgets.dart';
+import 'support_page.dart';
 import 'system_access_page.dart';
 import 'voice_settings_page.dart';
 
@@ -126,11 +120,8 @@ class SettingsScreen extends ConsumerWidget {
     // 通用. HarmonyOS has no battery exemption to report.
     final exempt = android ? ref.watch(batteryExemptProvider).value : null;
     // 主机.
-    final ssh = ref.watch(hostsProvider.select((s) => s.ssh.length));
     final hostName = host.isLocal ? l10n.commonThisPhone : ref.watch(hostNameProvider(host)) ?? l10n.commonRemoteHost;
     // 帮助与关于.
-    final update = ref.watch(appUpdateProvider);
-    final newVersion = update.hasUpdate && !update.isSkipped;
 
     final page = AppPage.list(
       title: l10n.commonSettings,
@@ -278,6 +269,19 @@ class SettingsScreen extends ConsumerWidget {
               spot: SettingsIndex.entry(SettingsPageId.privacy),
               onTap: () => _push(context, const PrivacyPage()),
             ),
+            // DS Pro: 全局用量与花费, 本地备份与恢复.
+            SettingsTile(
+              icon: AppIcons.chart,
+              tint: SettingsHues.general,
+              spot: SettingsIndex.entry(SettingsPageId.usageOverview),
+              onTap: () => _push(context, const GlobalUsagePage()),
+            ),
+            SettingsTile(
+              icon: AppIcons.exportLog,
+              tint: SettingsHues.general,
+              spot: SettingsIndex.entry(SettingsPageId.localBackup),
+              onTap: () => _push(context, const LocalBackupPage()),
+            ),
           ],
         ),
         SettingsSection(
@@ -291,13 +295,6 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => _push(context, const EngineScreen()),
             ),
             SettingsTile(
-              icon: AppIcons.remoteHosts,
-              tint: SettingsHues.hosts,
-              spot: SettingsIndex.entry(SettingsPageId.remote),
-              value: ssh == 0 ? null : Text(l10n.hubValueHosts(ssh)),
-              onTap: () => _push(context, const RemoteScreen()),
-            ),
-            SettingsTile(
               icon: AppIcons.configure,
               tint: SettingsHues.hosts,
               spot: SettingsIndex.entry(SettingsPageId.engineParams),
@@ -306,38 +303,27 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ],
         ),
+        // DS Pro: 帮助与关于 holds 打赏, 致谢 and 诊断.
         SettingsSection(
           title: l10n.hubGroupHelp,
           children: [
-            if (ref.watch(askAiAvailableProvider))
-              SettingsTile(
-                key: const ValueKey('settings-ask-ai'),
-                icon: AppIcons.askAi,
-                tint: SettingsHues.help,
-                spot: Spots.askAi,
-                value: Text(l10n.askAiTooltip),
-                onTap: () => unawaited(askAi(context, AskAiTopic.overview)),
-              ),
+            SettingsTile(
+              icon: AppIcons.donate,
+              tint: SettingsHues.help,
+              spot: SettingsIndex.entry(SettingsPageId.support),
+              onTap: () => _push(context, const DonatePage()),
+            ),
             SettingsTile(
               icon: AppIcons.community,
               tint: SettingsHues.help,
-              spot: Spots.community,
-              onTap: () => _push(context, communityPage()),
+              spot: SettingsIndex.entry(SettingsPageId.thanks),
+              onTap: () => _push(context, const ThanksPage()),
             ),
             SettingsTile(
               icon: AppIcons.diagnostics,
               tint: SettingsHues.help,
               spot: SettingsIndex.entry(SettingsPageId.diagnostics),
               onTap: () => _push(context, const DiagnosticsPage()),
-            ),
-            SettingsTile(
-              icon: AppIcons.info,
-              tint: SettingsHues.help,
-              spot: SettingsIndex.entry(SettingsPageId.about),
-              value: newVersion
-                  ? UpdateBadge(l10n.hubAboutNewVersion)
-                  : Text(update.current.name, style: AppType.tabular(Theme.of(context).textTheme.bodyMedium!)),
-              onTap: () => _push(context, const AboutPage()),
             ),
           ],
         ),
@@ -409,9 +395,6 @@ class _SettingsOverviewState extends ConsumerState<SettingsOverview> {
     final runtime = ref.watch(localRuntimeProvider);
     final engine = EngineStatusView.of(runtime);
     final colors = DshColors.of(context);
-    final active = ref.watch(activeHostProvider);
-    final remoteOnly = runtime.status.runtimeMissing && !active.isLocal;
-
     // The account's wallets when signed in; otherwise the key's balance.
     final money = account.signedIn && wallets != null ? balanceFromAccount(wallets) : balance.balance;
     final low = !account.signedIn && balance.isLow;
@@ -426,8 +409,6 @@ class _SettingsOverviewState extends ConsumerState<SettingsOverview> {
     final String subtitle;
     var warn = false;
     var mono = false;
-    // Set when the card shows the remote host: its link state.
-    String? hostLink;
     switch (account.phase) {
       case AccountPhase.signedIn:
         leading = AccountAvatar(profile: account.profile, size: OverviewCard.avatarSize);
@@ -437,13 +418,6 @@ class _SettingsOverviewState extends ConsumerState<SettingsOverview> {
         leading = const OverviewGlyph(AppIcons.apiKey);
         title = l10n.hubSettingsAccount;
         subtitle = l10n.hubSettingsSigningIn;
-      case _ when remoteOnly:
-        final link = HostStatusView.ofLink(ref.watch(hostLinkStatusProvider(active)).value ?? HostLinkStatus.idle);
-        leading = OverviewGlyph(hostKindIcon(active.kind), tint: hostKindTint(active.kind));
-        title = ref.watch(hostNameProvider(active)) ?? l10n.commonRemoteHost;
-        subtitle = [l10n.commonRemoteHost, link.label].join(' · ');
-        warn = link.tone == StatusTone.error || link.tone == StatusTone.warn;
-        hostLink = link.label;
       case _ when settings.hasApiKey:
         leading = const OverviewGlyph(AppIcons.apiKey);
         title = l10n.hubSettingsApiKey;
@@ -479,10 +453,8 @@ class _SettingsOverviewState extends ConsumerState<SettingsOverview> {
               ? TextStyle(color: colors.warning)
               : null,
         ),
-        semanticLabel: hostLink != null
-            ? l10n.hubSettingsHostSemantics(title, hostLink)
-            : l10n.hubSettingsAccountSemantics(title, subtitle),
-        onTap: () => _push(hostLink != null ? const RemoteScreen() : const AccountPage()),
+        semanticLabel: l10n.hubSettingsAccountSemantics(title, subtitle),
+        onTap: () => _push(const AccountPage()),
         footer: OverviewFooter(
           tone: engine.tone,
           text: [l10n.hubSettingsEngine, engine.label, if (dsh != null) 'DSH $dsh'].join(' · '),
@@ -492,3 +464,4 @@ class _SettingsOverviewState extends ConsumerState<SettingsOverview> {
     );
   }
 }
+

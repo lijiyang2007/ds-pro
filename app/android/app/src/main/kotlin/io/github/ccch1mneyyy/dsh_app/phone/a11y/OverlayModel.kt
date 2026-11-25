@@ -98,7 +98,7 @@ internal class StepHistory(private val capacity: Int = CAPACITY) {
 
 /**
  * The header's keys, left to right: the same in the capsule and the card. 暂停 (held a second:
- * 停止) and 回到 DSH Go at the right end.
+ * 停止) and 回到 DS Pro at the right end.
  */
 internal enum class Slot { MARK, LINE, PAUSE, BACK }
 

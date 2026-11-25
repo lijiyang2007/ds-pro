@@ -249,7 +249,7 @@ class _SheetLauncher extends StatelessWidget {
         body: Center(
           child: Builder(
             builder: (context) => TextButton(
-              onPressed: () => showHostSheet(context, onManage: () {}),
+              onPressed: () => showHostSheet(context),
               child: const Text('open'),
             ),
           ),

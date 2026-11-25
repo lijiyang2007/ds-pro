@@ -129,6 +129,7 @@ class BrandLockup extends StatelessWidget {
     this.label = AppInfo.wordmark,
     this.color,
     this.glyphColor,
+    this.glyph = true,
   });
 
   /// The lockup's size; the word is set at 0.95 × this unless [fontSize] is given.
@@ -144,6 +145,10 @@ class BrandLockup extends StatelessWidget {
 
   /// A flat glyph tint instead of the colour glyph.
   final Color? glyphColor;
+
+  /// Whether the glyph is drawn before the word. False leaves the word alone
+  /// (the drawer's lockup hides the mark; DS Pro's name carries the brand).
+  final bool glyph;
 
   /// Glyph height / word size.
   static const glyphScale = 1.25;
@@ -172,7 +177,9 @@ class BrandLockup extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     // The word's drawn size: the glyph and the gap scale with the text.
     final drawn = MediaQuery.textScalerOf(context).scale(_size);
-    final glyph = drawn * glyphScale;
+    final word = Text(label, style: AppType.wordmark(size: _size, color: color ?? scheme.onSurface));
+    if (!glyph) return word;
+    final glyphSize = drawn * glyphScale;
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -181,14 +188,11 @@ class BrandLockup extends StatelessWidget {
         _GlyphBaseline(
           // A baseline this far below the glyph's top puts its visual centre on the
           // word's x-height (or cap-height) centre when the row aligns baselines.
-          baseline: glyph * BrandMark.visualCentre.dy + centreRise(label, drawn),
-          child: BrandMark(size: glyph, color: glyphColor),
+          baseline: glyphSize * BrandMark.visualCentre.dy + centreRise(label, drawn),
+          child: BrandMark(size: glyphSize, color: glyphColor),
         ),
         SizedBox(width: drawn * gapScale),
-        Text(
-          label,
-          style: AppType.wordmark(size: _size, color: color ?? scheme.onSurface),
-        ),
+        word,
       ],
     );
   }
