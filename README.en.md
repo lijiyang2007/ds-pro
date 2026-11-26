@@ -162,7 +162,7 @@ DS Pro keeps only the "local runtime" use case and removes everything remote-rel
 - **Removed** Settings → Remote hosts and Privacy & sharing → "Improve DSH Go"
 - Settings → Help & About now keeps only the "Diagnostics" entry
 
-**Added**: local backup & restore, global usage & spend, and support pages (donate / credits).
+**Added**: local backup & restore, global usage & spend, and support pages (credits).
 
 ## Installation
 
